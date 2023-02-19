@@ -151,7 +151,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     if (gamesServicesController != null) {
       // Award achievement.
       if (widget.level.awardsAchievement) {
-        await gamesServicesController.awardAchievement(
+        gamesServicesController.awardAchievement(
           android: widget.level.achievementIdAndroid!,
           iOS: widget.level.achievementIdIOS!,
         );

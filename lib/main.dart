@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:wealth_wonderland/src/journey_screens/beginning/start_journey.dart';
+import 'dart:io';
 
 import 'src/app_lifecycle/app_lifecycle.dart';
 import 'src/audio/audio_controller.dart';
@@ -24,7 +26,7 @@ import 'src/settings/persistence/local_storage_settings_persistence.dart';
 import 'src/settings/persistence/settings_persistence.dart';
 import 'src/settings/settings.dart';
 import 'src/settings/settings_screen.dart';
-import 'src/style/my_transition.dart';
+import 'src/style/ink_transition.dart';
 import 'src/style/palette.dart';
 import 'src/style/snack_bar.dart';
 import 'src/win_game/win_game_screen.dart';
@@ -48,11 +50,11 @@ void main() {
   );
 
   GamesServicesController? gamesServicesController;
-  // if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
-  //   gamesServicesController = GamesServicesController()
-  //     // Attempt to log the player in.
-  //     ..initialize();
-  // }
+  if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
+    gamesServicesController = GamesServicesController()
+      // Attempt to log the player in.
+      ..initialize();
+  }
 
   runApp(
     MyApp(
@@ -72,14 +74,16 @@ class MyApp extends StatelessWidget {
           path: '/',
           builder: (context, state) =>
               const MainMenuScreen(key: Key('main menu')),
+          // const StartJourney(),
           routes: [
             GoRoute(
                 path: 'play',
-                pageBuilder: (context, state) => buildMyTransition<void>(
-                      child: const LevelSelectionScreen(
-                          key: Key('level selection')),
-                      color: context.watch<Palette>().backgroundLevelSelection,
-                    ),
+                // pageBuilder: (context, state) => buildMyTransition<void>(
+                //       child: const LevelSelectionScreen(
+                //           key: Key('level selection')),
+                //       color: context.watch<Palette>().beige,
+                //     ),
+                builder: (context, state) => const StartJourney(),
                 routes: [
                   GoRoute(
                     path: 'session/:level',

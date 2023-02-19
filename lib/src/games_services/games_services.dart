@@ -6,6 +6,8 @@ import 'dart:async';
 
 import 'package:games_services/games_services.dart' as gs;
 import 'package:logging/logging.dart';
+import '../style/error_snackbar.dart';
+import 'package:flutter/material.dart';
 
 import 'score.dart';
 
@@ -28,8 +30,33 @@ class GamesServicesController {
   ///
   /// Does nothing when the game isn't signed into the underlying
   /// games service.
-  Future<void> awardAchievement(
-      {required String iOS, required String android}) async {
+  // Future<void> awardAchievement(
+  //     {required String iOS, required String android}) async {
+  //   if (!await signedIn) {
+  //     showErrorSnackbar(
+  //       'sign in to view leaderboard',
+  //       action: SnackBarAction(
+  //         label: 'Sign in',
+  //         onPressed: initialize,
+  //       ),
+  //     );
+  //     _log.warning('Trying to award achievement when not logged in.');
+  //     return;
+  //   }
+
+  //   try {
+  //     await gs.GamesServices.unlock(
+  //       achievement: gs.Achievement(
+  //         androidID: android,
+  //         iOSID: iOS,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     _log.severe('Cannot award achievement: $e');
+  //   }
+  // }
+
+  void awardAchievement({required String iOS, required String android}) async {
     if (!await signedIn) {
       _log.warning('Trying to award achievement when not logged in.');
       return;
@@ -107,8 +134,8 @@ class GamesServicesController {
       await gs.GamesServices.submitScore(
         score: gs.Score(
           // TODO: When ready, change these leaderboard IDs.
-          iOSLeaderboardID: 'some_id_from_app_store',
-          androidLeaderboardID: 'sOmE_iD_fRoM_gPlAy',
+          iOSLeaderboardID: 'tictactoe.highest_score',
+          androidLeaderboardID: 'CgkIgZ29mawJEAIQAQ',
           value: score.score,
         ),
       );

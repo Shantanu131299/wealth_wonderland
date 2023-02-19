@@ -41,6 +41,8 @@ dependencies:
   provider: ^6.0.2
   shared_preferences: ^2.0.13
 
+  animated_text_kit: ^4.2.2
+
   games_services: ^3.0.0 # Achievements and leaderboards
   firebase_core: ^2.1.1
 
@@ -103,7 +105,10 @@ flutter:
   fonts:
     - family: Permanent Marker
       fonts:
-        - asset: assets/Permanent_Marker/PermanentMarker-Regular.ttf
+        - asset: assets/fonts/PermanentMarker-Regular.ttf
+    - family: Inconsolata
+      fonts:
+        - asset: assets/fonts/Inconsolata-Regular.ttf
 
 flutter_icons:
   android: true
