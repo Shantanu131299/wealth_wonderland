@@ -49,7 +49,7 @@ class LevelSelectionScreen extends StatelessWidget {
                         audioController.playSfx(SfxType.buttonTap);
 
                         GoRouter.of(context)
-                            .go('/play/session/${level.number}');
+                            .go('/play/beginning/${level.number}');
                       },
                       leading: Text(level.number.toString()),
                       title: Text('Level #${level.number}'),

@@ -6,25 +6,28 @@ import 'package:provider/provider.dart';
 import '../../settings/settings.dart';
 import '../../style/palette.dart';
 
-class StartJourney extends StatefulWidget {
-  const StartJourney({super.key});
+class StartJourney1 extends StatefulWidget {
+  const StartJourney1({super.key});
 
   @override
-  State<StartJourney> createState() => _StartJourneyState();
+  State<StartJourney1> createState() => _StartJourney1State();
 }
 
-class _StartJourneyState extends State<StartJourney> {
+class _StartJourney1State extends State<StartJourney1> {
   static final _log = Logger('PlaySessionScreen');
 
   static const dialogues = [
     "Welcome adventurer! You've embarked on an exciting new journey, where you'll explore the world of investing and learn how to make smart financial decisions.",
-    "As your guide, we'll help you navigate the ups and downs of the market and build a solid financial foundation for your future."
+    "As your guide, we'll help you navigate the ups and downs of the market and build a solid financial foundation for your future.",
+    "But before we set off on this adventure, we need to know a bit more about you."
   ];
 
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
     final palette = context.watch<Palette>();
+
+    bool completed = false;
 
     return Scaffold(
         backgroundColor: palette.beige,
@@ -59,13 +62,41 @@ class _StartJourneyState extends State<StartJourney> {
                         textStyle: const TextStyle(
                             fontFamily: "Inconsolata", fontSize: 20)),
                   ],
-                  isRepeatingAnimation: false,
+                  // isRepeatingAnimation: false,
+                  totalRepeatCount: 1,
                   pause: const Duration(milliseconds: 5000),
                   displayFullTextOnTap: true,
                   stopPauseOnTap: true,
+                  onFinished: () {
+                    setState(
+                      () {
+                        completed = true;
+                      },
+                    );
+                    _log.info('Text animation completed');
+                  },
                 ),
               ),
-            )
+            ),
+            // Visibility(
+            //   visible: completed,
+            //   child: Positioned(
+            //     bottom: 40,
+            //     child: Container(
+            //       // decoration: BoxDecoration(color: palette.gray),
+            //       height: 25,
+            //       width: 345,
+            //       child: AnimatedTextKit(
+            //         animatedTexts: [
+            //           FadeAnimatedText(
+            //             'Tap next to continue...',
+            //             duration: const Duration(milliseconds: 500),
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // )
           ]),
         ));
   }

@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:wealth_wonderland/src/components/scaffold_with_navbar.dart';
-import 'package:wealth_wonderland/src/journey_screens/beginning/start_journey.dart';
+import 'package:wealth_wonderland/src/journey_screens/beginning/start_journey_1.dart';
 import 'dart:io';
 
 import 'src/app_lifecycle/app_lifecycle.dart';
@@ -110,15 +110,20 @@ class MyApp extends StatelessWidget {
 
                   ShellRoute(
                       navigatorKey: _shellNavigatorKey,
-                      builder: ((context, state, child) {
-                        return ScaffoldWithNavBar(child: child);
+                      pageBuilder: ((context, state, child) {
+                        return buildMyTransition(
+                            child: ScaffoldWithNavBar(child: child),
+                            color: context.watch<Palette>().beige);
                       }),
                       routes: [
                         GoRoute(
                             path: 'beginning/1',
                             builder: ((context, state) {
-                              return const StartJourney();
-                            }))
+                              return const StartJourney1();
+                            })),
+                        // GoRoute(
+                        //   path: 'beginning/2',
+                        // )
                       ]),
 
                   GoRoute(
