@@ -19,7 +19,7 @@ class _StartJourney1State extends State<StartJourney1> {
   static const dialogues = [
     "Welcome adventurer! You've embarked on an exciting new journey, where you'll explore the world of investing and learn how to make smart financial decisions.",
     "As your guide, we'll help you navigate the ups and downs of the market and build a solid financial foundation for your future.",
-    "But before we set off on this adventure, we need to know a bit more about you."
+    // "But before we set off on this adventure, we need to know a bit more about you."
   ];
 
   @override
@@ -61,6 +61,9 @@ class _StartJourney1State extends State<StartJourney1> {
                     TyperAnimatedText(dialogues[1],
                         textStyle: const TextStyle(
                             fontFamily: "Inconsolata", fontSize: 20)),
+                    // TyperAnimatedText(dialogues[2],
+                    //     textStyle: const TextStyle(
+                    //         fontFamily: "Inconsolata", fontSize: 20)),
                   ],
                   // isRepeatingAnimation: false,
                   totalRepeatCount: 1,

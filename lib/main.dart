@@ -16,6 +16,7 @@ import 'src/app_lifecycle/app_lifecycle.dart';
 import 'src/audio/audio_controller.dart';
 import 'src/games_services/games_services.dart';
 import 'src/games_services/score.dart';
+import 'src/journey_screens/beginning/start_journey_2.dart';
 import 'src/level_selection/level_selection_screen.dart';
 import 'src/level_selection/levels.dart';
 import 'src/main_menu/main_menu_screen.dart';
@@ -121,9 +122,11 @@ class MyApp extends StatelessWidget {
                             builder: ((context, state) {
                               return const StartJourney1();
                             })),
-                        // GoRoute(
-                        //   path: 'beginning/2',
-                        // )
+                        GoRoute(
+                            path: 'beginning/2',
+                            builder: ((context, state) {
+                              return const StartJourney2();
+                            })),
                       ]),
 
                   GoRoute(

@@ -61,32 +61,62 @@ class MainMenuScreen extends StatelessWidget {
               ),
             ),
             _gap,
-            if (gamesServicesController != null) ...[
-              _hideUntilReady(
-                ready: gamesServicesController.signedIn,
-                // TODO: show an "active animation on the button"
-                child: DelayedAppear(
-                  ms: 600,
-                  child: RoughButton(
-                    onTap: () => gamesServicesController.showAchievements(),
-                    child: const Text('Achievements'),
-                  ),
-                ),
+            // if (gamesServicesController != null) ...[
+            //   _hideUntilReady(
+            //     ready: gamesServicesController.signedIn,
+            //     // TODO: show an "active animation on the button"
+            //     child: DelayedAppear(
+            //       ms: 600,
+            //       child: RoughButton(
+            //         onTap: () => gamesServicesController.showAchievements(),
+            //         child: const Text('Achievements'),
+            //       ),
+            //     ),
+            //   ),
+            //   _gap,
+            //   _hideUntilReady(
+            //     // TODO: show an "active animation on the button"
+            //     ready: gamesServicesController.signedIn,
+            //     child: DelayedAppear(
+            //       ms: 400,
+            //       child: RoughButton(
+            //         onTap: () => gamesServicesController.showLeaderboard(),
+            //         child: const Text('Leaderboard'),
+            //       ),
+            //     ),
+            //   ),
+            //   _gap,
+            // ],
+            DelayedAppear(
+              ms: 600,
+              child: RoughButton(
+                onTap: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  // GoRouter.of(context).go('/play');
+                },
+                // drawRectangle: true,
+                textColor: palette.trueWhite,
+                fontSize: 42,
+                soundEffect: SfxType.erase,
+                child: const Text('Achievements'),
               ),
-              _gap,
-              _hideUntilReady(
-                // TODO: show an "active animation on the button"
-                ready: gamesServicesController.signedIn,
-                child: DelayedAppear(
-                  ms: 400,
-                  child: RoughButton(
-                    onTap: () => gamesServicesController.showLeaderboard(),
-                    child: const Text('Leaderboard'),
-                  ),
-                ),
+            ),
+
+            DelayedAppear(
+              ms: 400,
+              child: RoughButton(
+                onTap: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  // GoRouter.of(context).go('/play');
+                },
+                // drawRectangle: true,
+                textColor: palette.trueWhite,
+                fontSize: 42,
+                soundEffect: SfxType.erase,
+                child: const Text('Leaderboards'),
               ),
-              _gap,
-            ],
+            ),
+            _gap,
             DelayedAppear(
               ms: 200,
               child: RoughButton(
