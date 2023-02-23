@@ -21,7 +21,7 @@ class _StartJourney2State extends State<StartJourney2> {
   final List<String> _questions = [
     "First, tell us your name! What should we call you?",
     "What kind of adventurer do you want to be?",
-    "How old are you? This will hep us decide..?",
+    "How old are you?",
     "Every adventurer needs a strong foundation to build on, and the same goes for investing. How much do you plan to invest regularly?",
     "Finally, What's your investing horizon? Do you have any financial goals in mind, like saving for a down payment on a house or planning for retirement?"
   ];
@@ -69,33 +69,64 @@ class _StartJourney2State extends State<StartJourney2> {
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
 
+    String image = '';
+
+    if (kind == 'cautious') {
+      image = "assets/images/journey/beginning/cautious.png";
+    } else if (kind == 'brave') {
+      image = "assets/images/journey/beginning/brave.png";
+    }
+
     return Scaffold(
       backgroundColor: palette.beige,
       resizeToAvoidBottomInset: false,
-      body: Container(
-          constraints: const BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/journey/beginning/bg1.jpg"),
-                  fit: BoxFit.cover)),
-          child: Column(
-            children: [
-              Expanded(
-                  child: Visibility(
-                      visible: !introFinished, child: _introTitle())),
-              Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: Visibility(
-                      visible: introFinished,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        child: _buildCurrentQuestion(),
-                      ),
-                    ),
-                  ))
-            ],
-          )),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+              constraints: const BoxConstraints.expand(),
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image:
+                          AssetImage("assets/images/journey/beginning/bg1.jpg"),
+                      fit: BoxFit.cover)),
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Visibility(
+                          visible: !introFinished, child: _introTitle())),
+                  Expanded(
+                      flex: 3,
+                      child: Center(
+                        child: Visibility(
+                          visible: introFinished,
+                          child: AnimatedSwitcher(
+                            // reverseDuration: Duration(milliseconds: 1000),
+                            duration: const Duration(milliseconds: 1000),
+                            child: _buildCurrentQuestion(),
+                          ),
+                          // child: SharedAxisSwitcher(
+                          //   // reverseDuration: Duration(milliseconds: 1000),
+                          //   // duration: const Duration(milliseconds: 1000),
+                          //   child: _buildCurrentQuestion(),
+                          // ),
+                        ),
+                      ))
+                ],
+              )),
+          Positioned(
+              top: 65,
+              width: 255,
+              height: 255,
+              child: Visibility(
+                visible: _questionIndex == 1 && kind != '',
+                child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(image), fit: BoxFit.cover))),
+              )),
+        ],
+      ),
     );
   }
 
@@ -151,6 +182,7 @@ class _StartJourney2State extends State<StartJourney2> {
     final palette = context.watch<Palette>();
 
     return Column(
+      key: const Key('1'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
@@ -208,59 +240,191 @@ class _StartJourney2State extends State<StartJourney2> {
     );
   }
 
+  // Widget _buildRiskProfileSelection() {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: [
+  //       Container(
+  //         padding: const EdgeInsets.only(left: 40, right: 40),
+  //         child: Text(
+  //           _questions[_questionIndex],
+  //           style: const TextStyle(fontSize: 30, fontFamily: 'Inconsolata'),
+  //         ),
+  //       ),
+  //       RadioListTile(
+  //           title: const Text(
+  //             'Are you brave and daring, ready to take on high-risk investments?',
+  //             style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
+  //           ),
+  //           value: 'brave',
+  //           groupValue: kind,
+  //           onChanged: (value) {
+  //             setState(() {
+  //               _isDaring = true;
+  //               kind = 'brave';
+  //             });
+  //           }),
+  //       RadioListTile(
+  //           title: const Text(
+  //             'Or are you more cautious and methodical, sticking to lower-risk options?',
+  //             style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
+  //           ),
+  //           value: 'cautious',
+  //           groupValue: kind,
+  //           onChanged: (value) {
+  //             setState(() {
+  //               _isDaring = false;
+  //               kind = 'cautious';
+  //             });
+  //           }),
+  //       ElevatedButton(
+  //         onPressed: () async {
+  //           SharedPreferences prefs = await SharedPreferences.getInstance();
+  //           prefs.setBool('isDaring', _isDaring);
+  //           setState(() {
+  //             _questionIndex++;
+  //           });
+  //         },
+  //         child: const Text('This is me!'),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Widget _buildRiskProfileSelection() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: Text(
+    final palette = context.watch<Palette>();
+    return Container(
+      key: const Key('2'),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
             _questions[_questionIndex],
             style: const TextStyle(fontSize: 30, fontFamily: 'Inconsolata'),
           ),
-        ),
-        RadioListTile(
-            title: const Text(
-              'Are you brave and daring, ready to take on high-risk investments?',
-              style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
-            ),
-            value: 'brave',
-            groupValue: kind,
-            onChanged: (value) {
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 20),
+                child: Radio(
+                    value: 'brave',
+                    groupValue: kind,
+                    onChanged: (value) {
+                      setState(() {
+                        _isDaring = true;
+                        kind = 'brave';
+                      });
+                    }),
+              ),
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                          fontFamily: 'Inconsolata',
+                          fontSize: 20,
+                          color: palette.ink),
+                      children: const [
+                        TextSpan(text: 'Are you '),
+                        TextSpan(
+                          text: 'brave',
+                          style: TextStyle(
+                              fontFamily: 'Permanent Marker',
+                              fontSize: 20,
+                              color: Color(0xffc13e49)),
+                        ),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                          text: 'daring',
+                          style: TextStyle(
+                              fontFamily: 'Permanent Marker',
+                              fontSize: 20,
+                              color: Color(0xffc13e49)),
+                        ),
+                        TextSpan(
+                            text: ', ready to take on high-risk investments?'),
+                      ]),
+                ),
+              )
+              // child: Text(
+              //   'Are you brave and daring, ready to take on high-risk investments?',
+              //   style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
+              // ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(right: 20),
+                child: Radio(
+                    value: 'cautious',
+                    groupValue: kind,
+                    onChanged: (value) {
+                      setState(() {
+                        _isDaring = false;
+                        kind = 'cautious';
+                      });
+                    }),
+              ),
+              // const Flexible(
+              //   child: Text(
+              //     'Or are you more cautious and methodical, sticking to lower-risk options?',
+              //     style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
+              //   ),
+              // ),
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                          fontFamily: 'Inconsolata',
+                          fontSize: 20,
+                          color: palette.ink),
+                      children: const [
+                        TextSpan(text: 'Or are you more '),
+                        TextSpan(
+                          text: 'cautious',
+                          style: TextStyle(
+                              fontFamily: 'Permanent Marker',
+                              fontSize: 20,
+                              color: Color(0xff2a6d43)),
+                        ),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                          text: 'methodical',
+                          style: TextStyle(
+                              fontFamily: 'Permanent Marker',
+                              fontSize: 20,
+                              color: Color(0xff2a6d43)),
+                        ),
+                        TextSpan(text: ', sticking to lower-risk options?'),
+                      ]),
+                ),
+              )
+            ],
+          ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setBool('isDaring', _isDaring);
               setState(() {
-                _isDaring = true;
-                kind = 'brave';
+                _questionIndex++;
               });
-            }),
-        RadioListTile(
-            title: const Text(
-              'Or are you more cautious and methodical, sticking to lower-risk options?',
-              style: TextStyle(fontSize: 20, fontFamily: 'Inconsolata'),
-            ),
-            value: 'cautious',
-            groupValue: kind,
-            onChanged: (value) {
-              setState(() {
-                _isDaring = false;
-                kind = 'cautious';
-              });
-            }),
-        ElevatedButton(
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setBool('isDaring', _isDaring);
-            setState(() {
-              _questionIndex++;
-            });
-          },
-          child: const Text('This is me!'),
-        ),
-      ],
+            },
+            child: const Text('This is me!'),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildAgeInput() {
     return Column(
+      key: const Key('3'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(_questions[_questionIndex]),
@@ -288,6 +452,7 @@ class _StartJourney2State extends State<StartJourney2> {
 
   Widget _buildSipAmountInput() {
     return Column(
+      key: const Key('4'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(_questions[_questionIndex]),
@@ -315,6 +480,7 @@ class _StartJourney2State extends State<StartJourney2> {
 
   Widget _buildHorizonInput() {
     return Column(
+      key: const Key('5'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(_questions[_questionIndex]),

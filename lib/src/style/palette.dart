@@ -40,4 +40,5 @@ class Palette {
   Color get beige => const Color(0xffe2e8ce);
   Color get orange => const Color(0xffff7f11);
   Color get red => const Color(0xffff1b1c);
+  Color get green => const Color(0xff1bff31);
 }
