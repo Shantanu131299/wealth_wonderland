@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:wealth_wonderland/src/style/palette.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_animation/weather_animation.dart';
 
 import '../../style/rough/button.dart';
 
@@ -69,12 +70,12 @@ class _StartJourney2State extends State<StartJourney2> {
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
 
-    String image = '';
+    String kindImage = '';
 
     if (kind == 'cautious') {
-      image = "assets/images/journey/beginning/cautious.png";
+      kindImage = "assets/images/journey/beginning/cautious.png";
     } else if (kind == 'brave') {
-      image = "assets/images/journey/beginning/brave.png";
+      kindImage = "assets/images/journey/beginning/brave.png";
     }
 
     return Scaffold(
@@ -83,13 +84,25 @@ class _StartJourney2State extends State<StartJourney2> {
       body: Stack(
         alignment: Alignment.center,
         children: [
+          Visibility(
+            visible: _questionIndex == 1 && kind != '',
+            child: Opacity(
+              opacity: 0.5,
+              child: SizedBox.expand(
+                  child: kind == 'brave'
+                      ? WeatherScene.values.byName('stormy').getWeather()
+                      : WeatherScene.values
+                          .byName('scorchingSun')
+                          .getWeather()),
+            ),
+          ),
           Container(
               constraints: const BoxConstraints.expand(),
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image:
-                          AssetImage("assets/images/journey/beginning/bg1.jpg"),
-                      fit: BoxFit.cover)),
+              // decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //         image:
+              //             AssetImage("assets/images/journey/beginning/bg1.jpg"),
+              //         fit: BoxFit.cover)),
               child: Column(
                 children: [
                   Expanded(
@@ -102,7 +115,7 @@ class _StartJourney2State extends State<StartJourney2> {
                           visible: introFinished,
                           child: AnimatedSwitcher(
                             // reverseDuration: Duration(milliseconds: 1000),
-                            duration: const Duration(milliseconds: 1000),
+                            duration: const Duration(milliseconds: 500),
                             child: _buildCurrentQuestion(),
                           ),
                           // child: SharedAxisSwitcher(
@@ -123,7 +136,7 @@ class _StartJourney2State extends State<StartJourney2> {
                 child: Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(image), fit: BoxFit.cover))),
+                            image: AssetImage(kindImage), fit: BoxFit.cover))),
               )),
         ],
       ),
