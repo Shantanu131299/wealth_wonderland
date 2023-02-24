@@ -163,7 +163,7 @@ class _StartJourney2State extends State<StartJourney2> {
         ],
         // isRepeatingAnimation: false,
         totalRepeatCount: 1,
-        pause: const Duration(milliseconds: 5000),
+        pause: const Duration(milliseconds: 2000),
         displayFullTextOnTap: true,
         stopPauseOnTap: true,
         onFinished: () {
@@ -176,24 +176,23 @@ class _StartJourney2State extends State<StartJourney2> {
   }
 
   Widget _buildCurrentQuestion() {
+    final palette = context.watch<Palette>();
     if (_questionIndex == 0) {
-      return _buildNameInput();
+      return _buildNameInput(palette);
     } else if (_questionIndex == 1) {
-      return _buildRiskProfileSelection();
+      return _buildRiskProfileSelection(palette);
     } else if (_questionIndex == 2) {
-      return _buildAgeInput();
+      return _buildAgeInput(palette);
     } else if (_questionIndex == 3) {
-      return _buildSipAmountInput();
+      return _buildSipAmountInput(palette);
     } else if (_questionIndex == 4) {
-      return _buildHorizonInput();
+      return _buildHorizonInput(palette);
     } else {
-      return _buildFinalMessage();
+      return _buildFinalMessage(palette);
     }
   }
 
-  Widget _buildNameInput() {
-    final palette = context.watch<Palette>();
-
+  Widget _buildNameInput(Palette palette) {
     return Column(
       key: const Key('1'),
       mainAxisAlignment: MainAxisAlignment.center,
@@ -304,8 +303,7 @@ class _StartJourney2State extends State<StartJourney2> {
   //   );
   // }
 
-  Widget _buildRiskProfileSelection() {
-    final palette = context.watch<Palette>();
+  Widget _buildRiskProfileSelection(Palette palette) {
     return Container(
       key: const Key('2'),
       padding: const EdgeInsets.all(20),
@@ -435,68 +433,136 @@ class _StartJourney2State extends State<StartJourney2> {
     );
   }
 
-  Widget _buildAgeInput() {
+  Widget _buildAgeInput(Palette palette) {
     return Column(
       key: const Key('3'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(_questions[_questionIndex]),
-        TextField(
-          keyboardType: TextInputType.number,
-          onChanged: (value) {
-            setState(() {
-              _age = int.tryParse(value)!;
-            });
-          },
+        Container(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: Text(
+            _questions[_questionIndex],
+            style: const TextStyle(fontSize: 30, fontFamily: 'Inconsolata'),
+          ),
         ),
-        ElevatedButton(
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setInt('age', _age);
-            setState(() {
-              _questionIndex++;
-            });
-          },
-          child: const Text('Next'),
+        Container(
+          margin: const EdgeInsets.fromLTRB(40, 20, 40, 10),
+          padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: palette.gray)),
+          child: TextField(
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              labelText: "Your age",
+            ),
+            onChanged: (value) {
+              setState(() {
+                _age = int.tryParse(value)!;
+              });
+            },
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(20),
+          child: ElevatedButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setInt('age', _age);
+              setState(() {
+                _questionIndex++;
+              });
+            },
+            child: const Text(
+              'Next',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSipAmountInput() {
+  Widget _buildSipAmountInput(Palette palette) {
     return Column(
       key: const Key('4'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(_questions[_questionIndex]),
-        TextField(
-          keyboardType: TextInputType.number,
-          onChanged: (value) {
-            setState(() {
-              _sipAmount = int.tryParse(value)!;
-            });
-          },
+        Container(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          // child: Text(
+          //   _questions[_questionIndex],
+          //   style: const TextStyle(fontSize: 30, fontFamily: 'Inconsolata'),
+          // )
+
+          child: AnimatedTextKit(
+              animatedTexts: [
+                TyperAnimatedText(_questions[_questionIndex],
+                    textStyle: const TextStyle(
+                        fontFamily: "Inconsolata", fontSize: 30)),
+              ],
+              // isRepeatingAnimation: false,
+              totalRepeatCount: 1,
+              // pause: const Duration(milliseconds: 1000),
+              displayFullTextOnTap: true,
+              stopPauseOnTap: true),
         ),
-        ElevatedButton(
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setInt('sipAmount', _sipAmount);
-            setState(() {
-              _questionIndex++;
-            });
-          },
-          child: const Text('Next'),
+        Container(
+          margin: const EdgeInsets.fromLTRB(40, 20, 40, 10),
+          padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: palette.gray)),
+          child: TextField(
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              labelText: "SIP amount",
+            ),
+            onChanged: (value) {
+              setState(() {
+                _sipAmount = int.tryParse(value)!;
+              });
+            },
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(20),
+          child: ElevatedButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setInt('sipAmount', _sipAmount);
+              setState(() {
+                _questionIndex++;
+              });
+            },
+            child: const Text('Next'),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildHorizonInput() {
+  Widget _buildHorizonInput(Palette palette) {
     return Column(
       key: const Key('5'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(_questions[_questionIndex]),
+        Container(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: AnimatedTextKit(
+              animatedTexts: [
+                TyperAnimatedText(_questions[_questionIndex],
+                    textStyle: const TextStyle(
+                        fontFamily: "Inconsolata", fontSize: 30)),
+              ],
+              // isRepeatingAnimation: false,
+              totalRepeatCount: 1,
+              // pause: const Duration(milliseconds: 1000),
+              displayFullTextOnTap: true,
+              stopPauseOnTap: true),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -511,7 +577,13 @@ class _StartJourney2State extends State<StartJourney2> {
                 });
               },
             ),
-            const Text('5 years'),
+            const Text(
+              '5+',
+              style: TextStyle(
+                fontFamily: 'Permanent Marker',
+                fontSize: 20,
+              ),
+            ),
             Radio(
               value: 'ten',
               groupValue: radioVal,
@@ -523,7 +595,13 @@ class _StartJourney2State extends State<StartJourney2> {
                 });
               },
             ),
-            const Text('10 years'),
+            const Text(
+              '10+',
+              style: TextStyle(
+                fontFamily: 'Permanent Marker',
+                fontSize: 20,
+              ),
+            ),
             Radio(
               value: 'twenty',
               groupValue: radioVal,
@@ -535,7 +613,13 @@ class _StartJourney2State extends State<StartJourney2> {
                 });
               },
             ),
-            const Text('20 years'),
+            const Text(
+              '20+',
+              style: TextStyle(
+                fontFamily: 'Permanent Marker',
+                fontSize: 20,
+              ),
+            ),
             Radio(
               value: 'thirty',
               groupValue: radioVal,
@@ -547,7 +631,13 @@ class _StartJourney2State extends State<StartJourney2> {
                 });
               },
             ),
-            const Text('30 years'),
+            const Text(
+              '30+',
+              style: TextStyle(
+                fontFamily: 'Permanent Marker',
+                fontSize: 20,
+              ),
+            ),
           ],
         ),
         ElevatedButton(
@@ -564,7 +654,7 @@ class _StartJourney2State extends State<StartJourney2> {
     );
   }
 
-  Widget _buildFinalMessage() {
+  Widget _buildFinalMessage(Palette palette) {
     final palette = context.watch<Palette>();
 
     return Container(
