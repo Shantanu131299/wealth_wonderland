@@ -8,13 +8,15 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:wealth_wonderland/src/journey_screens/beginning/start_journey.dart';
+import 'package:wealth_wonderland/src/components/scaffold_with_navbar.dart';
+import 'package:wealth_wonderland/src/journey_screens/beginning/start_journey_1.dart';
 import 'dart:io';
 
 import 'src/app_lifecycle/app_lifecycle.dart';
 import 'src/audio/audio_controller.dart';
 import 'src/games_services/games_services.dart';
 import 'src/games_services/score.dart';
+import 'src/journey_screens/beginning/start_journey_2.dart';
 import 'src/level_selection/level_selection_screen.dart';
 import 'src/level_selection/levels.dart';
 import 'src/main_menu/main_menu_screen.dart';
@@ -67,8 +69,15 @@ void main() {
 
 Logger _log = Logger('main.dart');
 
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+
 class MyApp extends StatelessWidget {
   static final _router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: '/',
     routes: [
       GoRoute(
           path: '/',
@@ -78,28 +87,48 @@ class MyApp extends StatelessWidget {
           routes: [
             GoRoute(
                 path: 'play',
-                // pageBuilder: (context, state) => buildMyTransition<void>(
-                //       child: const LevelSelectionScreen(
-                //           key: Key('level selection')),
-                //       color: context.watch<Palette>().beige,
-                //     ),
-                builder: (context, state) => const StartJourney(),
+                pageBuilder: (context, state) => buildMyTransition<void>(
+                      child: const LevelSelectionScreen(
+                          key: Key('level selection')),
+                      color: context.watch<Palette>().beige,
+                    ),
                 routes: [
-                  GoRoute(
-                    path: 'session/:level',
-                    pageBuilder: (context, state) {
-                      final levelNumber = int.parse(state.params['level']!);
-                      final level = gameLevels
-                          .singleWhere((e) => e.number == levelNumber);
-                      return buildMyTransition<void>(
-                        child: PlaySessionScreen(
-                          level,
-                          key: const Key('play session'),
-                        ),
-                        color: context.watch<Palette>().backgroundPlaySession,
-                      );
-                    },
-                  ),
+                  // GoRoute(
+                  //   path: 'session/:level',
+                  //   pageBuilder: (context, state) {
+                  //     final levelNumber = int.parse(state.params['level']!);
+                  //     final level = gameLevels
+                  //         .singleWhere((e) => e.number == levelNumber);
+                  //     return buildMyTransition<void>(
+                  //       child: PlaySessionScreen(
+                  //         level,
+                  //         key: const Key('play session'),
+                  //       ),
+                  //       color: context.watch<Palette>().backgroundPlaySession,
+                  //     );
+                  //   },
+                  // ),
+
+                  ShellRoute(
+                      navigatorKey: _shellNavigatorKey,
+                      pageBuilder: ((context, state, child) {
+                        return buildMyTransition(
+                            child: ScaffoldWithNavBar(child: child),
+                            color: context.watch<Palette>().beige);
+                      }),
+                      routes: [
+                        GoRoute(
+                            path: 'beginning/1',
+                            builder: ((context, state) {
+                              return const StartJourney1();
+                            })),
+                        GoRoute(
+                            path: 'beginning/2',
+                            builder: ((context, state) {
+                              return const StartJourney2();
+                            })),
+                      ]),
+
                   GoRoute(
                     path: 'won',
                     pageBuilder: (context, state) {
